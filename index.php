@@ -1,35 +1,61 @@
-<?php  
-     session_start();
-    if(isset($_COOKIE['remember'])){
-            $token = $_COOKIE['remember'];
-            require './connect.php';
-            $sql = "select * from customer
-            where token = '$token'
-            limit 1";
-            $redult = mysqli_query($connect,$sql);
-            $each = mysqli_fetch_array($redult);
-           
-            $_SESSION['id'] = $each['id'];
-            $_SESSION['name'] = $each['name'];
-
-    }
-
-?>
 <!DOCTYPE html>
 <html lang="en">
-<?php include('head.php') ?>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
 <body>
-    <!-- phần menu -->
+<?php
+  include '../menu.php';
+  require '../connect.php';
+//  $sql = "select * from manufacturers";
+  $sql = "SELECT 
+  admin.id,
+  admin.name,
+  admin.email
+  
+  from admin
+  WHERE LEVEL = 0 ";
+  $result = mysqli_query($connect, $sql);
 
-    <?php include('header.php') ?>
-   
-    <!-- phần bài đăng -->
-   
-    <?php include('container.php') ?>
-   
-    <!-- phần chân web -->
-
+  ?>
+  <h1>
+  Quản lý Admin
+  </h1>
+  <h3>
+    <button>
+  <a href="form_insert.php">
+    Thêm Admin
+  </a>
+</button>
+</h3>
+  <table border="1" width="100%">
+    <tr>
+      <th>Mã</th>
+      <th>Tên  </th>
+      <th>Xóa</th>
+    </tr>                
+    <?php   foreach ($result as $each) : ?> 
+      <tr>
+        <td>
+            <?php echo $each['id'] ?>
+        </td>
+        <td>
+            <?php echo $each['name'] ?>
+        </td>
+        <td>
+          <a href="delete.php?id=<?php echo $each['id'] ?>">
+            Xóa
+          </a>
+        </td>
+        <?php endforeach  ?>
+      </tr>
     
-
+  </table>
 </body>
+
 </html>
